@@ -19,12 +19,12 @@
             <TableColumn fx:id="brutto" editable="false" prefWidth="75.0" text="Brutto-M.Z."/>
         </columns>
       </TableView>
-       <Button fx:id="anlegen" layoutX="356.0" layoutY="281.0" mnemonicParsing="false" onAction="#addImmobilie" text="Objekt Anlegen"/>
+       <Button fx:id="anlegen" layoutX="349.0" layoutY="281.0" mnemonicParsing="false" onAction="#addImmobilie" text="Objekt Anlegen"/>
        <Button fx:id="delete" layoutX="197.0" layoutY="283.0" mnemonicParsing="false" onAction="#deleteMieter" text="Mieter Löschen"/>
        <Button fx:id="add" layoutX="78.0" layoutY="283.0" mnemonicParsing="false" onAction="#addMieter" text="Hinzufügen"/>
        <TreeView fx:id="treeview" editable="true" layoutX="909.0" layoutY="23.0" prefHeight="247.0" prefWidth="225.0"/>
-       <Button fx:id="deleteObject" layoutX="496.0" layoutY="282.0" mnemonicParsing="false" onAction="#deleteImmobilie" text="Objekt Löschen"/>
-       <Button fx:id="speichern" layoutX="611.0" layoutY="283.0" mnemonicParsing="false" onAction="#onSpeichern" text="Datei Speichern"/>
-       <Button fx:id="laden" layoutX="736.0" layoutY="284.0" mnemonicParsing="false" onAction="#onLaden" text="Datei Laden"/>
+       <Button fx:id="deleteObject" layoutX="501.0" layoutY="283.0" mnemonicParsing="false" onAction="#deleteImmobilie" text="Objekt Löschen"/>
+       <Button fx:id="speichern" layoutX="648.0" layoutY="282.0" mnemonicParsing="false" onAction="#onSpeichern" text="Datei Speichern"/>
+       <Button fx:id="laden" layoutX="799.0" layoutY="283.0" mnemonicParsing="false" onAction="#onLaden" text="Datei Laden"/>
    </children>
 </AnchorPane>
