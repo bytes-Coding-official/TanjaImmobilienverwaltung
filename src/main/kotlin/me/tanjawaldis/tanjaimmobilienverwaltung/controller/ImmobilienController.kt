@@ -18,12 +18,6 @@ import java.util.*
 class ImmobilienController : Initializable {
 
     @FXML
-    private lateinit var resources: ResourceBundle
-
-    @FXML
-    private lateinit var location: URL
-
-    @FXML
     private lateinit var delete: Button
 
     @FXML
@@ -58,6 +52,13 @@ class ImmobilienController : Initializable {
 
     @FXML
     private lateinit var parkplatz: TableColumn<Mieter, Boolean>
+
+
+    @FXML
+    private lateinit var speichern: Button
+
+    @FXML
+    private lateinit var laden: Button
 
     @FXML
     private lateinit var search: Button
@@ -95,8 +96,20 @@ class ImmobilienController : Initializable {
     }
 
     @FXML
+    fun onLaden() {
+        FileController.loadFromFile()
+        updateTreeview()
+    }
+
+    @FXML
+    fun onSpeichern() {
+        FileController.saveToFile()
+    }
+
+    @FXML
     fun addMieter(event: ActionEvent) {
         val selectedImmobilie = treeview.selectionModel.selectedItem ?: return
+        if (selectedImmobilie.parent == null) return
         //get the ID of the immobilie
         val immobilieName = selectedImmobilie.value
         val straße = selectedImmobilie.parent.value
@@ -104,7 +117,7 @@ class ImmobilienController : Initializable {
 
         val immobilie = Utility.immobilien.find { it.name == immobilieName && it.straße == straße && it.ort == ort } ?: return
 
-        val mieter = Mieter(immobilie.id, "Tanja Waldis", "test str 1", 36644, "testStadt", "test@test.de", "123434623454", true, 100, 89, 50)
+        val mieter = Mieter(immobilie.id, "Tanja Waldis", "test str 1", 36644, "testStadt", "test@test.de", "123434623454", true, 89, 50)
         tableview.items.add(mieter)
         Utility.mieter.add(mieter)
     }
@@ -120,20 +133,14 @@ class ImmobilienController : Initializable {
         if (selectedItem.isLeaf) {
 
             //if it has 2 parents its a house than remove it from the immobilien
-            if (selectedItem.parent.parent != null) {
+            if (selectedItem.parent != null) {
                 val immobilieName = selectedItem.value
                 val straße = selectedItem.parent.value
                 val ort = selectedItem.parent.parent.value
                 val selectedImmobilie = Utility.immobilien.find { it.name == immobilieName && it.straße == straße && it.ort == ort } ?: return
-                Utility.immobilien.remove(selectedImmobilie)
-
-            } else {
-                //if it has only one parent its a street than remove all houses from the immobilien
-                val straße = selectedItem.value
-                val ort = selectedItem.parent.value
-                val selectedImmobilie = Utility.immobilien.filter { it.straße == straße && it.ort == ort }
                 Utility.immobilien.removeAll(selectedImmobilie)
-            }
+
+            } 
         } else {
             //if it has no parent its a ort than remove all streets and houses from the immobilien
             val ort = selectedItem.value
@@ -149,29 +156,6 @@ class ImmobilienController : Initializable {
         tableview.items.remove(selectedItem)
         Utility.mieter.remove(selectedItem)
     }
-
-    @FXML
-    fun initialize() {
-        assert(add != null) { "fx:id=\"add\" was not injected: check your FXML file 'main.fxml'." }
-        assert(anlegen != null) { "fx:id=\"anlegen\" was not injected: check your FXML file 'main.fxml'." }
-        assert(brutto != null) { "fx:id=\"brutto\" was not injected: check your FXML file 'main.fxml'." }
-        assert(delete != null) { "fx:id=\"delete\" was not injected: check your FXML file 'main.fxml'." }
-        assert(deleteObject != null) { "fx:id=\"deleteObject\" was not injected: check your FXML file 'main.fxml'." }
-        assert(email != null) { "fx:id=\"email\" was not injected: check your FXML file 'main.fxml'." }
-        assert(id != null) { "fx:id=\"id\" was not injected: check your FXML file 'main.fxml'." }
-        assert(name != null) { "fx:id=\"name\" was not injected: check your FXML file 'main.fxml'." }
-        assert(nebenkosten != null) { "fx:id=\"nebenkosten\" was not injected: check your FXML file 'main.fxml'." }
-        assert(netto != null) { "fx:id=\"netto\" was not injected: check your FXML file 'main.fxml'." }
-        assert(ort != null) { "fx:id=\"ort\" was not injected: check your FXML file 'main.fxml'." }
-        assert(parkplatz != null) { "fx:id=\"parkplatz\" was not injected: check your FXML file 'main.fxml'." }
-        assert(plz != null) { "fx:id=\"plz\" was not injected: check your FXML file 'main.fxml'." }
-        assert(straße != null) { "fx:id=\"straße\" was not injected: check your FXML file 'main.fxml'." }
-        assert(tableview != null) { "fx:id=\"tableview\" was not injected: check your FXML file 'main.fxml'." }
-        assert(telefon != null) { "fx:id=\"telefon\" was not injected: check your FXML file 'main.fxml'." }
-        assert(treeview != null) { "fx:id=\"treeview\" was not injected: check your FXML file 'main.fxml'." }
-
-    }
-
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
 
@@ -236,29 +220,29 @@ class ImmobilienController : Initializable {
             selectedMieter.setTelefonProperty(event.newValue)
         }
 
-        brutto.setOnEditCommit { event ->
-            val selectedMieter = event.rowValue
-            selectedMieter.setBruttoProperty(event.newValue)
-        }
-
         netto.setOnEditCommit { event ->
             val selectedMieter = event.rowValue
             selectedMieter.setNettoProperty(event.newValue)
+            selectedMieter.getBruttoPropertyElement().addListener { _, _, _ -> updateTable() }
+            updateTable()
         }
 
         nebenkosten.setOnEditCommit { event ->
             val selectedMieter = event.rowValue
             selectedMieter.setNebenkostenProperty(event.newValue)
+            //update the brutto value in the ui
+            selectedMieter.getBruttoPropertyElement().addListener { _, _, _ -> updateTable() }
+            updateTable()
         }
 
 
-        //update the treeview with the immobilien based on:
-        //root element is the ort of the immobilie
-        //child element is the street of the immobilie
-        //leaf element is the name of the immobilie
+        //get the bruttoProperty
 
-        //if a user clicks on the leaf element, the tableview should be updated with the mieter of the selected immobilie
+        updateTreeview()
+    }
 
+
+    private fun updateTreeview() {
         val rootItem = TreeItem("Immobilien")
         rootItem.isExpanded = true
         treeview.root = rootItem
@@ -285,9 +269,9 @@ class ImmobilienController : Initializable {
         }
 
         treeview.setOnMouseClicked { event ->
-            if (event.clickCount == 2) { // Double click
+            if (event.clickCount == 2) {
                 val selectedItem = treeview.selectionModel.selectedItem
-                if (selectedItem.isLeaf) {
+                if (selectedItem.isLeaf && selectedItem.parent != null) {
                     val immobilieName = selectedItem.value
                     val straße = selectedItem.parent.value
                     val ort = selectedItem.parent.parent.value
@@ -297,6 +281,13 @@ class ImmobilienController : Initializable {
             }
 
         }
+    }
+
+    private fun updateTable() {
+        //copy current items
+        val table = tableview.items.toList()
+        tableview.items.clear()
+        tableview.items.addAll(table)
     }
 
     private fun loadMieterForImmobilie(immobilie: Immobilie) {

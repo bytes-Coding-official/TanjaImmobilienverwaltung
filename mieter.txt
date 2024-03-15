@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Tanja Waldis",
+    "straße": "test str 1",
+    "plz": 36644,
+    "ort": "testStadt",
+    "email": "email@test.de",
+    "telefon": "123434623454",
+    "parkplatz": true,
+    "netto": 100,
+    "nebenkosten": 89
+  },
+  {
+    "id": 2,
+    "name": "Tanja Waldis",
+    "straße": "test str 1",
+    "plz": 36644,
+    "ort": "testStadt",
+    "email": "test@test.de",
+    "telefon": "123434623454",
+    "parkplatz": true,
+    "netto": 89,
+    "nebenkosten": 50
+  }
+]

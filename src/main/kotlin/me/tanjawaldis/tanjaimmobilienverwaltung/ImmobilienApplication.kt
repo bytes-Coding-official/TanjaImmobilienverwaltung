@@ -21,6 +21,6 @@ class ImmobilienApplication : Application() {
 fun main() {
     Utility.immobilien.add(Immobilie(1, "Haus 1", "test str 1", "testStadt"))
     Utility.immobilien.add(Immobilie(2, "Haus 2", "test str 1", "testStadt"))
-    Utility.mieter.add(Mieter(1, "Tanja Waldis", "test str 1", 36644, "testStadt", "email@test.de", "123434623454", true, 100, 89, 50))
+    Utility.mieter.add(Mieter(1, "Tanja Waldis", "test str 1", 36644, "testStadt", "email@test.de", "123434623454", true, 100, 89))
     Application.launch(ImmobilienApplication::class.java)
 }

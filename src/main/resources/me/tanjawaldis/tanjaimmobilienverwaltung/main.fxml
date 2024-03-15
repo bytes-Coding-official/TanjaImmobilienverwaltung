@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="1163.0" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="me.tanjawaldis.tanjaimmobilienverwaltung.controller.ImmobilienController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="1163.0" xmlns="http://javafx.com/javafx/21" fx:controller="me.tanjawaldis.tanjaimmobilienverwaltung.controller.ImmobilienController">
    <children>
        <TableView fx:id="tableview" editable="true" layoutX="12.0" layoutY="20.0" prefHeight="247.0" prefWidth="883.0">
         <columns>
@@ -16,7 +16,7 @@
             <TableColumn fx:id="netto" prefWidth="75.0" text="Netto-MZ" />
             <TableColumn fx:id="nebenkosten" prefWidth="75.0" text="N.K." />
             <TableColumn fx:id="parkplatz" prefWidth="75.0" text="Parkplatz P.M." />
-            <TableColumn fx:id="brutto" prefWidth="75.0" text="Brutto-M.Z." />
+            <TableColumn fx:id="brutto" editable="false" prefWidth="75.0" text="Brutto-M.Z."/>
         </columns>
       </TableView>
        <Button fx:id="anlegen" layoutX="356.0" layoutY="281.0" mnemonicParsing="false" onAction="#addImmobilie" text="Objekt Anlegen"/>
@@ -24,5 +24,7 @@
        <Button fx:id="add" layoutX="78.0" layoutY="283.0" mnemonicParsing="false" onAction="#addMieter" text="Hinzufügen"/>
        <TreeView fx:id="treeview" editable="true" layoutX="909.0" layoutY="23.0" prefHeight="247.0" prefWidth="225.0"/>
        <Button fx:id="deleteObject" layoutX="496.0" layoutY="282.0" mnemonicParsing="false" onAction="#deleteImmobilie" text="Objekt Löschen"/>
+       <Button fx:id="speichern" layoutX="611.0" layoutY="283.0" mnemonicParsing="false" onAction="#onSpeichern" text="Datei Speichern"/>
+       <Button fx:id="laden" layoutX="736.0" layoutY="284.0" mnemonicParsing="false" onAction="#onLaden" text="Datei Laden"/>
    </children>
 </AnchorPane>

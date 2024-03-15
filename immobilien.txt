@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Haus 1",
+    "straße": "test str 1",
+    "ort": "testStadt"
+  },
+  {
+    "id": 2,
+    "name": "Haus 2",
+    "straße": "test str 1",
+    "ort": "testStadt"
+  }
+]

@@ -1,21 +1,44 @@
 package me.tanjawaldis.tanjaimmobilienverwaltung.model
 
-import javafx.beans.property.*
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleStringProperty
 
-class Mieter(id: Int, name: String, straße: String, plz: Int, ort: String, email: String, telefon: String, parkplatz: Boolean, brutto: Int, netto: Int, nebenkosten: Int) {
+data class Mieter(var id: Int, var name: String, var straße: String, var plz: Int, var ort: String, var email: String, var telefon: String, var parkplatz: Boolean, var netto: Int, var nebenkosten: Int) {
 
 
-    private var idProperty: IntegerProperty
-    private var nameProperty: StringProperty
-    private var straßeProperty: StringProperty
-    private var plzProperty: IntegerProperty
-    private var ortProperty: StringProperty
-    private var emailProperty: StringProperty
-    private var telefonProperty: StringProperty
-    private var parkplatzProperty: BooleanProperty
-    private var bruttoProperty: IntegerProperty
-    private var nettoProperty: IntegerProperty
-    private var nebenkostenProperty: IntegerProperty
+    @Transient
+    private var idProperty: SimpleIntegerProperty
+
+    @Transient
+    private var nameProperty: SimpleStringProperty
+
+    @Transient
+    private var straßeProperty: SimpleStringProperty
+
+    @Transient
+    private var plzProperty: SimpleIntegerProperty
+
+    @Transient
+    private var ortProperty: SimpleStringProperty
+
+    @Transient
+    private var emailProperty: SimpleStringProperty
+
+    @Transient
+    private var telefonProperty: SimpleStringProperty
+
+    @Transient
+    private var parkplatzProperty: SimpleBooleanProperty
+
+    @Transient
+    private var bruttoProperty: SimpleIntegerProperty
+
+    @Transient
+    private var nettoProperty: SimpleIntegerProperty
+
+    @Transient
+    private var nebenkostenProperty: SimpleIntegerProperty
 
 
     init {
@@ -28,9 +51,16 @@ class Mieter(id: Int, name: String, straße: String, plz: Int, ort: String, emai
         emailProperty = SimpleStringProperty(email)
         telefonProperty = SimpleStringProperty(telefon)
         parkplatzProperty = SimpleBooleanProperty(parkplatz)
-        bruttoProperty = SimpleIntegerProperty(brutto)
         nettoProperty = SimpleIntegerProperty(netto)
         nebenkostenProperty = SimpleIntegerProperty(nebenkosten)
+        bruttoProperty = SimpleIntegerProperty(nebenkosten + netto)
+        nettoProperty.addListener { _, _, _ -> updateBrutto() }
+        nebenkostenProperty.addListener { _, _, _ -> updateBrutto() }
+    }
+
+
+    private fun updateBrutto() {
+        bruttoProperty.set(nettoProperty.get() + nebenkostenProperty.get())
     }
 
     //getter and setter for the properties
@@ -68,6 +98,10 @@ class Mieter(id: Int, name: String, straße: String, plz: Int, ort: String, emai
 
     fun getBruttoProperty(): Int {
         return bruttoProperty.get()
+    }
+
+    fun getBruttoPropertyElement(): SimpleIntegerProperty {
+        return bruttoProperty
     }
 
     fun getNettoProperty(): Int {
@@ -110,16 +144,15 @@ class Mieter(id: Int, name: String, straße: String, plz: Int, ort: String, emai
         parkplatzProperty.set(parkplatz)
     }
 
-    fun setBruttoProperty(brutto: Int) {
-        bruttoProperty.set(brutto)
-    }
 
     fun setNettoProperty(netto: Int) {
         nettoProperty.set(netto)
+        bruttoProperty.set(nebenkostenProperty.get() + netto)
     }
 
     fun setNebenkostenProperty(nebenkosten: Int) {
         nebenkostenProperty.set(nebenkosten)
+        bruttoProperty.set(nebenkosten + nettoProperty.get())
     }
 
 
