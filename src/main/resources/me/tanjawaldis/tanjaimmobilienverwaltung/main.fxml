@@ -2,11 +2,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="1163.0" xmlns="http://javafx.com/javafx/21" fx:controller="me.tanjawaldis.tanjaimmobilienverwaltung.controller.ImmobilienController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="1163.0" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="me.tanjawaldis.tanjaimmobilienverwaltung.controller.ImmobilienController">
    <children>
        <TableView fx:id="tableview" editable="true" layoutX="12.0" layoutY="20.0" prefHeight="247.0" prefWidth="883.0">
         <columns>
-          <TableColumn fx:id="id" prefWidth="75.0" text="ID" />
+            <TableColumn fx:id="id" editable="false" prefWidth="75.0" text="ID"/>
           <TableColumn fx:id="name" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="straße" prefWidth="75.0" text="Strasse" />
             <TableColumn fx:id="plz" prefWidth="75.0" text="PLZ"/>

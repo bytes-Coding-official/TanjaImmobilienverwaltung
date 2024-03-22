@@ -81,6 +81,9 @@ class ImmobilienController : Initializable {
     @FXML
     fun addImmobilie(event: ActionEvent) {
         val selectedItem = treeview.selectionModel.selectedItem ?: return
+        if (selectedItem.parent != null && selectedItem.parent.parent != null) {
+            return
+        }
         // Create a dialog to get the name of the new object from the user
         val dialog = TextInputDialog()
         dialog.title = "Neue Immobilie hinzufügen"
@@ -88,10 +91,10 @@ class ImmobilienController : Initializable {
         val result = dialog.showAndWait()
         // If the user entered a name, create a new TreeItem and add it to the selected item
         if (result.isPresent) {
-            val newName = result.get()
-            val newImmobilie = Immobilie(Utility.immobilien.size + 1, newName, selectedItem.value, selectedItem.parent.value)
+            val newStraßeNummer = result.get()
+            val newImmobilie = Immobilie(Utility.immobilien.size + 1, newStraßeNummer, selectedItem.value)
             Utility.immobilien.add(newImmobilie)
-            selectedItem.children.add(TreeItem(newName))
+            selectedItem.children.add(TreeItem(newStraßeNummer))
         }
     }
 
@@ -107,17 +110,15 @@ class ImmobilienController : Initializable {
     }
 
     @FXML
-    fun addMieter(event: ActionEvent) {
+    fun addMieter() {
         val selectedImmobilie = treeview.selectionModel.selectedItem ?: return
         if (selectedImmobilie.parent == null) return
         //get the ID of the immobilie
-        val immobilieName = selectedImmobilie.value
-        val straße = selectedImmobilie.parent.value
-        val ort = selectedImmobilie.parent.parent.value
+        val ort = selectedImmobilie.parent.value
+        val straßeNummer = selectedImmobilie.value
+        val immobilie = Utility.immobilien.find { it.straßeNummer == straßeNummer && it.ort == ort } ?: return
 
-        val immobilie = Utility.immobilien.find { it.name == immobilieName && it.straße == straße && it.ort == ort } ?: return
-
-        val mieter = Mieter(immobilie.id, "Tanja Waldis", "test str 1", 36644, "testStadt", "test@test.de", "123434623454", true, 89, 50)
+        val mieter = Mieter(immobilie.id, "Tanja Waldis", "test str 1", 1234, "testStadt", "test@test.de", "123434623454", true, 89, 50)
         tableview.items.add(mieter)
         Utility.mieter.add(mieter)
     }
@@ -134,13 +135,12 @@ class ImmobilienController : Initializable {
 
             //if it has 2 parents its a house than remove it from the immobilien
             if (selectedItem.parent != null) {
-                val immobilieName = selectedItem.value
-                val straße = selectedItem.parent.value
-                val ort = selectedItem.parent.parent.value
-                val selectedImmobilie = Utility.immobilien.find { it.name == immobilieName && it.straße == straße && it.ort == ort } ?: return
+                val ort = selectedItem.parent.value
+                val straßeNummer = selectedItem.value
+                val selectedImmobilie = Utility.immobilien.find { it.straßeNummer == straßeNummer && it.ort == ort } ?: return
                 Utility.immobilien.removeAll(selectedImmobilie)
 
-            } 
+            }
         } else {
             //if it has no parent its a ort than remove all streets and houses from the immobilien
             val ort = selectedItem.value
@@ -151,7 +151,7 @@ class ImmobilienController : Initializable {
     }
 
     @FXML
-    fun deleteMieter(event: ActionEvent) {
+    fun deleteMieter() {
         val selectedItem = tableview.selectionModel.selectedItem ?: return
         tableview.items.remove(selectedItem)
         Utility.mieter.remove(selectedItem)
@@ -235,9 +235,6 @@ class ImmobilienController : Initializable {
             updateTable()
         }
 
-
-        //get the bruttoProperty
-
         updateTreeview()
     }
 
@@ -258,13 +255,12 @@ class ImmobilienController : Initializable {
                 rootItem.children.add(ortItem)
             }
 //check if there is already a straßeItem with the same name
-            var straßeItem = ortItem.children.find { it.value == immobilie.straße }
+            var straßeItem = ortItem.children.find { it.value == immobilie.straßeNummer }
             if (straßeItem == null) {
-                straßeItem = TreeItem(immobilie.straße)
+                straßeItem = TreeItem(immobilie.straßeNummer)
                 ortItem.children.add(straßeItem)
             }
             //add the immobilie to the straßeItem
-            straßeItem.children.add(TreeItem(immobilie.name))
 
         }
 
@@ -272,10 +268,9 @@ class ImmobilienController : Initializable {
             if (event.clickCount == 2) {
                 val selectedItem = treeview.selectionModel.selectedItem
                 if (selectedItem.isLeaf && selectedItem.parent != null) {
-                    val immobilieName = selectedItem.value
-                    val straße = selectedItem.parent.value
-                    val ort = selectedItem.parent.parent.value
-                    val selectedImmobilie = Utility.immobilien.find { it.name == immobilieName && it.straße == straße && it.ort == ort } ?: return@setOnMouseClicked
+                    val straßeNummer = selectedItem.value
+                    val ort = selectedItem.parent.value
+                    val selectedImmobilie = Utility.immobilien.find { it.straßeNummer == straßeNummer && it.ort == ort } ?: return@setOnMouseClicked
                     loadMieterForImmobilie(selectedImmobilie)
                 }
             }
@@ -297,6 +292,4 @@ class ImmobilienController : Initializable {
         tableview.items = FXCollections.observableArrayList(mieterForImmobilie)
 
     }
-
-
 }

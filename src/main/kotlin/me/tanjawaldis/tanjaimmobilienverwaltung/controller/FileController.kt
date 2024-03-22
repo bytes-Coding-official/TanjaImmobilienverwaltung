@@ -16,11 +16,11 @@ object FileController {
     fun saveToFile() {
         //create a file called mieter.txt in the current directory of the jar file
         val mieterPath = "mieter.txt"
-        val immobilienPath = "immobilien.txt"
+        val immobiliePath = "immobilien.txt"
 
         //create a new file
         val fileMieter = File(mieterPath)
-        val fileImmobilien = File(immobilienPath)
+        val fileImmobilien = File(immobiliePath)
         //if the file does not exist create it
         if (!fileMieter.exists()) {
             fileMieter.createNewFile()
